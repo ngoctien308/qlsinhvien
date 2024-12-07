@@ -58,10 +58,10 @@
         </div>
         <div class="form-group mb-3">
             <label for="name6">Giới tính</label>
-             <select name="" class="form-select" id="">
+             <select name="gioi_tinh" class="form-select" id="gioi_tinh">
                 <option value="">Giới tính</option>
-                <option <?=$data["gioi_tinh"]==1 ? "selected" :""?> value="1">Giới tính nam</option>
-                <option <?=$data["gioi_tinh"]==2 ? "selected" :""?> value="2">Giới tính nữ</option>
+                <option value="1" <?=$data["gioi_tinh"]==1 ? "selected" :""?> value="1">Giới tính nam</option>
+                <option value="2" <?=$data["gioi_tinh"]==2 ? "selected" :""?> value="2">Giới tính nữ</option>
              </select>
         </div>
         <div class="text-center">
