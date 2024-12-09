@@ -34,10 +34,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($thongtinQuery->num_rows > 0) {
                 while ($thongtin = $thongtinQuery->fetch_assoc()) {
                     $daThanhtoan = 'Chưa thanh toán';
-                    $nutThanhtoan = "<form method='post'><button class='btn btn-warning'>Thanh toán</button></form>";
                     if($thongtin['daThanhToan'] == 1) {
                         $daThanhtoan = 'Đã thanh toán';
-                        $nutThanhtoan = '<button disabled class="btn btn-warning">Thanh toán</button>';
                     }
 
                     echo '<tr>
@@ -54,5 +52,5 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         ?>
     </tbody>
     </table>
-    <?php echo $nutThanhtoan; ?>
+    <form method='post'><button class='btn btn-warning'>Thanh toán</button></form>
 </div>

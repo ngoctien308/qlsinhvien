@@ -22,7 +22,7 @@ $result = $conn->query('select * from sinhvien');
                     echo '<tr>
                         <td>'. $row['ten'] .'</td>
                         <td>'. $row['lop'] .'</td>
-                        <td><button type="button" class="btn btn-primary">Xem chi tiết</button></td>
+                        <td><a href="./detail.php?sinhvienId='.$row['id'].'" class="btn btn-primary">Xem chi tiết</a></td>
                         </tr>';
                 }
             }
