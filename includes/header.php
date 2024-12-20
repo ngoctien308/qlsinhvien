@@ -1,6 +1,6 @@
 <?php
 // Connect db
-$host = 'localhost:3307'; // Địa chỉ MySQL server (thường là localhost)
+$host = 'localhost'; // Địa chỉ MySQL server (thường là localhost)
 $username = 'root';  // Tên đăng nhập MySQL
 $password = '';      // Mật khẩu MySQL (để trống nếu mặc định)
 $dbname = 'qlsinhvien'; // Tên cơ sở dữ liệu
@@ -10,7 +10,7 @@ $conn = new mysqli($host, $username, $password, $dbname);
 
 // Kiểm tra kết nối
 if ($conn->connect_error) {
-    die("Kết nối thất bại: " . $conn->connect_error);
+  die("Kết nối thất bại: " . $conn->connect_error);
 }
 //  else {
 //     echo "Kết nối thành công!";
@@ -20,7 +20,8 @@ if ($conn->connect_error) {
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="index.php">Quản lí sinh viên</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+      aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarColor01">

@@ -1,32 +1,35 @@
-<?php 
+<?php
 include('../includes/head.php');
 include('../includes/header.php');
-$result = $conn->query('select * from sinhvien');
+$result = $conn->query('SELECT DISTINCT sinhvien.ten, sinhvien.lop,sinhvien.id
+ from dangkimonhoc
+ join sinhvien on sinhvien.id=dangkimonhoc.sinhvienId ');
 ?>
 
 
 <div class='container'>
     <h1 class='mt-2'>Học phí</h1>
     <table class="table table-hover">
-    <thead>
-        <tr class='table-active'>
-        <th scope="col">Tên sinh viên</th>
-        <th scope="col">Lớp</th>
-        <th scope="col" colspan="2">Tùy chọn</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
+        <thead>
+            <tr class='table-active'>
+                <th scope="col">Tên sinh viên</th>
+                <th scope="col">Lớp</th>
+                <th scope="col" colspan="2">Tùy chọn</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     echo '<tr>
-                        <td>'. $row['ten'] .'</td>
-                        <td>'. $row['lop'] .'</td>
-                        <td><a href="http://localhost/qlsinhvien/tuition/detail.php?sinhvienId='.$row['id'].'" class="btn btn-primary">Xem chi tiết</a></td>
+                        <td>' . $row['ten'] . '</td>
+                        <td>' . $row['lop'] . '</td>
+                        <td><a href="http://localhost/qlsinhvien/tuition/detail.php?sinhvienId=' . $row['id'] . '" class="btn btn-primary">Xem chi tiết</a>
+                        <a href="http://localhost/qlsinhvien/tuition/update.php?sinhvienId=' . $row['id'] . '" class="btn btn-danger">Sửa</a></td>
                         </tr>';
                 }
             }
-        ?>
-    </tbody>
+            ?>
+        </tbody>
     </table>
 </div>
