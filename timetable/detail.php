@@ -5,6 +5,7 @@ include('../includes/header.php');
 $sv = $conn->query("select * from sinhvien where id=".$_GET['sinhvienId'])->fetch_assoc();
 
 $monhocQuery = $conn->query("select monhoc.* from dangkimonhoc inner join monhoc on monhoc.id=dangkimonhoc.monhocId where sinhvienId=".$_GET['sinhvienId']);
+$hockiQuery = $conn->query("select distinct hocki.tenhocki, hocki.id from dangkimonhoc inner join hocki on hocki.id=dangkimonhoc.hockiId where sinhvienId=".$_GET['sinhvienId']);
 
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btnthemTkb'])) {
     $ngay = $_POST['ngay'];
@@ -12,11 +13,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btnthemTkb'])) {
     $tietbd = $_POST['tietbd'];
     $tietkt = $_POST['tietkt'];
     $monhocId = $_POST['monhocId'];
-    $conn->query("insert into thoikhoabieu(monhocId, sinhvienId, tietbd, tietkt, ngay) values(".$monhocId.", ".$sinhvienId.", ".$tietbd.", ".$tietkt.", '".$ngay."')");
+    $hockiId = $_POST['hockiId'];
+    $conn->query("insert into thoikhoabieu(monhocId, sinhvienId, tietbd, tietkt, ngay, hockiId) values(".$monhocId.", ".$sinhvienId.", ".$tietbd.", ".$tietkt.", '".$ngay."', ".$hockiId.")");
     header('location: ./detail.php?sinhvienId='.$_GET['sinhvienId']);
 }
 
-$tkbQuery = $conn->query('select thoikhoabieu.*, monhoc.tenmonhoc from thoikhoabieu inner join monhoc on monhoc.id=thoikhoabieu.monhocId where sinhvienId='.$_GET['sinhvienId']);
+$tkbQuery = $conn->query("select * from thoikhoabieu inner join monhoc on monhoc.id=thoikhoabieu.monhocId inner join hocki on hocki.id=thoikhoabieu.hockiId where sinhvienId=".$_GET['sinhvienId']);
 ?>
 
 
@@ -30,6 +32,7 @@ $tkbQuery = $conn->query('select thoikhoabieu.*, monhoc.tenmonhoc from thoikhoab
             <th>Môn Học</th>
             <th>Tiết Bắt Đầu</th>
             <th>Tiết Kết Thúc</th>
+            <th>Học kì</th>
             <th colspan="2">Tùy chọn</th>
         </tr>
     </thead>
@@ -42,6 +45,7 @@ $tkbQuery = $conn->query('select thoikhoabieu.*, monhoc.tenmonhoc from thoikhoab
                         <td>'. $tkb['tenmonhoc'] .'</td>
                         <td>'. $tkb['tietbd'] .'</td>
                         <td>'. $tkb['tietkt'] .'</td>                       
+                        <td>'. $tkb['tenhocki'] .'</td>                       
                         <td><a href="./edit.php?id='.$tkb['id'].'&sinhvienId='.$tkb['sinhvienId'].'" class="btn btn-warning" >Sửa</a></td>                      
                         <td><a href="./delete.php?id='.$tkb['id'].'&sinhvienId='.$tkb['sinhvienId'].'" class="btn btn-danger">Xóa</a></td>                      
                         </tr>';
@@ -67,7 +71,7 @@ $tkbQuery = $conn->query('select thoikhoabieu.*, monhoc.tenmonhoc from thoikhoab
             </div>
             <div>
                 <label class='form-label'>Môn học</label>
-                <select class='form-control' name='monhocId'>
+                <select class='form-control' name='hockiId'>
                     <?php
                         if($monhocQuery->num_rows > 0) {
                             while ($monhoc = $monhocQuery->fetch_assoc()) {    
@@ -84,6 +88,18 @@ $tkbQuery = $conn->query('select thoikhoabieu.*, monhoc.tenmonhoc from thoikhoab
             <div>
                 <label  class='form-label'>Tiết kết thúc</label>
                 <input type="number" class='form-control' name='tietkt'>
+            </div>
+            <div>
+                <label  class='form-label'>Học kì</label>
+                <select class='form-control' name='monhocId'>
+                    <?php
+                        if($hockiQuery->num_rows > 0) {
+                            while ($hocki = $hockiQuery->fetch_assoc()) {    
+                                echo '<option value="'.$hocki['id'].'">'.$hocki['tenhocki'].'</option>';
+                            }
+                        }
+                    ?>
+                </select>
             </div>
         </div>
         <div class="modal-footer">
