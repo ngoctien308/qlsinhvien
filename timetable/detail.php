@@ -18,7 +18,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btnthemTkb'])) {
     header('location: ./detail.php?sinhvienId='.$_GET['sinhvienId']);
 }
 
-$tkbQuery = $conn->query("select * from thoikhoabieu inner join monhoc on monhoc.id=thoikhoabieu.monhocId inner join hocki on hocki.id=thoikhoabieu.hockiId where sinhvienId=".$_GET['sinhvienId']);
+$tkbQuery = $conn->query("select thoikhoabieu.*, monhoc.tenmonhoc, hocki.tenhocki from thoikhoabieu 
+inner join monhoc on monhoc.id=thoikhoabieu.monhocId 
+inner join hocki on hocki.id=thoikhoabieu.hockiId 
+where sinhvienId=".$_GET['sinhvienId']);
 ?>
 
 
