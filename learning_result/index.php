@@ -1,12 +1,13 @@
 <?php 
 include('../includes/head.php');
 include('../includes/header.php');
-$result = $conn->query('select * from sinhvien');
+$sinhvienQuery = $conn->query('select * from sinhvien');
 ?>
 
 
 <div class='container'>
     <h1 class='mt-2'>Kết quả học tập</h1>
+
     <table class="table table-hover">
     <thead>
         <tr class='table-active'>
@@ -17,12 +18,12 @@ $result = $conn->query('select * from sinhvien');
     </thead>
     <tbody>
         <?php
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
+            if ($sinhvienQuery->num_rows > 0) {
+                while ($sv = $sinhvienQuery->fetch_assoc()) {
                     echo '<tr>
-                        <td>'. $row['ten'] .'</td>
-                        <td>'. $row['lop'] .'</td>
-                        <td><button type="button" class="btn btn-primary">Xem chi tiết</button></td>
+                        <td>'. $sv['ten'] .'</td>  
+                        <td>'. $sv['lop'] .'</td>
+                        <td><a href="./detail.php?sinhvienId='.$sv['id'].'" class="btn btn-primary">Xem chi tiết</a></td>
                         </tr>';
                 }
             }
