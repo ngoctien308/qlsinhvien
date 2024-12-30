@@ -2,10 +2,10 @@
 include('../includes/head.php');
 include('../includes/header.php');
 
-$monhocQuery = $conn->query("select * from monhoc");
+$tkb = $conn->query('select * from thoikhoabieu where id='.$_GET['id'])->fetch_assoc();
 
-$tkbQuery = $conn->query("select thoikhoabieu.*, monhoc.ten as 'tenmonhoc' from thoikhoabieu inner join monhoc on monhoc.id = monhocId where thoikhoabieu.id = ".$_GET['id']);
-$tkb = $tkbQuery->fetch_assoc();
+$monhocQuery = $conn->query("select * from dangkimonhoc inner join monhoc on monhocId=monhoc.id where sinhvienId=".$_GET['sinhvienId']);
+
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $monhocId = $_POST['monhocId'];
@@ -28,12 +28,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             <select class='form-control' name='monhocId'>
                 <?php
                     if($monhocQuery->num_rows > 0) {
-                        while ($monhoc = $monhocQuery->fetch_assoc()) {                   
+                        while ($monhoc = $monhocQuery->fetch_assoc()) {  
                             $selectedString = "";
                             if($tkb['monhocId'] == $monhoc['id']) {
                                 $selectedString = "selected";
                             }
-                            echo '<option '. $selectedString .' value="'.$monhoc['id'].'">'.$monhoc['ten'].'</option>';
+                            echo '<option '. $selectedString .' value="'.$monhoc['id'].'">'.$monhoc['tenmonhoc'].'</option>';
                         }
                     }
                 ?>

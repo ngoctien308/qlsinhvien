@@ -1,7 +1,7 @@
 <?php 
 include('../includes/head.php');
 include('../includes/header.php');
-$result = $conn->query('select * from sinhvien');
+$svQuery = $conn->query('select * from sinhvien');
 ?>
 
 
@@ -17,12 +17,12 @@ $result = $conn->query('select * from sinhvien');
     </thead>
     <tbody>
         <?php
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
+            if ($svQuery->num_rows > 0) {
+                while ($sv = $svQuery->fetch_assoc()) {
                     echo '<tr>
-                        <td>'. $row['ten'] .'</td>
-                        <td>'. $row['lop'] .'</td>
-                        <td><a href="http://localhost/qlsinhvien/tuition/detail.php?sinhvienId='.$row['id'].'" class="btn btn-primary">Xem chi tiết</a></td>
+                        <td>'. $sv['ten'] .'</td>
+                        <td>'. $sv['lop'] .'</td>
+                        <td><a href="./detail.php?sinhvienId='.$sv['id'].'" class="btn btn-primary">Xem chi tiết</a></td>
                         </tr>';
                 }
             }

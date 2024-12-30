@@ -2,28 +2,27 @@
 include('../includes/head.php');
 include('../includes/header.php');
 
-$svQuery = $conn->query("select * from sinhvien where id = ".$_GET['sinhvienId']);
-$sv = $svQuery->fetch_assoc();
+$sv = $conn->query("select * from sinhvien where id=".$_GET['sinhvienId'])->fetch_assoc();
 
-$tkbQuery=$conn->query('select thoikhoabieu.*, monhoc.ten as "tenmonhoc" from thoikhoabieu inner join monhoc on monhoc.id=monhocId where sinhvienId='.$_GET['sinhvienId']);
+$monhocQuery = $conn->query("select monhoc.* from dangkimonhoc inner join monhoc on monhoc.id=dangkimonhoc.monhocId where sinhvienId=".$_GET['sinhvienId']);
 
-$monhocQuery = $conn->query("select * from monhoc");
-
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $monhocId = $_POST['monhocId'];
-    $sinhvienId = $_GET['sinhvienId'];
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btnthemTkb'])) {
     $ngay = $_POST['ngay'];
+    $sinhvienId = $_GET['sinhvienId'];
     $tietbd = $_POST['tietbd'];
     $tietkt = $_POST['tietkt'];
-    $conn->query("insert into thoikhoabieu (monhocId, sinhvienId, tietbd, tietkt, ngay) values(".$monhocId.",".$sinhvienId.",".$tietbd.",".$tietkt.",'".$ngay."')");
-    header("Refresh: 1");
+    $monhocId = $_POST['monhocId'];
+    $conn->query("insert into thoikhoabieu(monhocId, sinhvienId, tietbd, tietkt, ngay) values(".$monhocId.", ".$sinhvienId.", ".$tietbd.", ".$tietkt.", '".$ngay."')");
+    header('location: ./detail.php?sinhvienId='.$_GET['sinhvienId']);
 }
+
+$tkbQuery = $conn->query('select thoikhoabieu.*, monhoc.tenmonhoc from thoikhoabieu inner join monhoc on monhoc.id=thoikhoabieu.monhocId where sinhvienId='.$_GET['sinhvienId']);
 ?>
 
 
 <div class='container'>
     <h1 class='mt-2'>Thời khóa biểu của sinh viên <?php echo $sv['ten']; ?></h1>
-    <button class="btn btn-info mb-2"  data-bs-toggle="modal" data-bs-target="#addmodal">Thêm lịch học</button>
+    <button class="btn btn-info mb-2"  data-bs-toggle="modal" data-bs-target="#addmodal">Thêm lịch học</button>    
     <table class="table table-hover">
     <thead>
         <tr class='table-active'>
@@ -37,13 +36,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     <tbody>
         <?php
              if ($tkbQuery->num_rows > 0) {
-                while ($tkb = $tkbQuery->fetch_assoc()) {                   
+                while ($tkb = $tkbQuery->fetch_assoc()) {
                     echo '<tr>
                         <td>'. $tkb['ngay'] .'</td>
                         <td>'. $tkb['tenmonhoc'] .'</td>
                         <td>'. $tkb['tietbd'] .'</td>
                         <td>'. $tkb['tietkt'] .'</td>                       
-                        <td><a href="./edit.php?id='.$tkb['id'].'" class="btn btn-warning" >Sửa</a></td>                      
+                        <td><a href="./edit.php?id='.$tkb['id'].'&sinhvienId='.$tkb['sinhvienId'].'" class="btn btn-warning" >Sửa</a></td>                      
                         <td><a href="./delete.php?id='.$tkb['id'].'&sinhvienId='.$tkb['sinhvienId'].'" class="btn btn-danger">Xóa</a></td>                      
                         </tr>';
                 }
@@ -71,15 +70,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <select class='form-control' name='monhocId'>
                     <?php
                         if($monhocQuery->num_rows > 0) {
-                            while ($monhoc = $monhocQuery->fetch_assoc()) {                   
-                                echo '<option value="'.$monhoc['id'].'">'.$monhoc['ten'].'</option>';
+                            while ($monhoc = $monhocQuery->fetch_assoc()) {    
+                                echo '<option value="'.$monhoc['id'].'">'.$monhoc['tenmonhoc'].'</option>';
                             }
                         }
                     ?>
                 </select>
             </div>
             <div>
-                <label  class='form-label'>Tiết bắt đầu</label>
+                <label class='form-label'>Tiết bắt đầu</label>
                 <input type="number" class='form-control' name='tietbd'>
             </div>
             <div>
@@ -89,7 +88,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" name='btnthem' class="btn btn-primary">Thêm</button>
+            <button type="submit" name='btnthemTkb' class="btn btn-primary">Thêm</button>
         </div>
     </form>
     </div>

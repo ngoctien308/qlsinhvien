@@ -1,32 +1,34 @@
 <?php 
 include('../includes/head.php');
 include('../includes/header.php');
-$result = $conn->query('select * from sinhvien');
+
+$svQuery = $conn->query('select * from sinhvien');
 ?>
 
 
-<div class='container'>
-    <h1 class='mt-2'>Các môn đã đăng kí</h1>
-    <table class="table table-hover">
-    <thead>
-        <tr class='table-active'>
-        <th scope="col">Tên sinh viên</th>
-        <th scope="col">Lớp</th>
-        <th scope="col" colspan="2">Tùy chọn</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo '<tr>
-                        <td>'. $row['ten'] .'</td>
-                        <td>'. $row['lop'] .'</td>
-                        <td><button type="button" class="btn btn-primary">Xem chi tiết</button></td>
-                        </tr>';
+<div class='container mt-2'>
+    <h1>Xem thông tin đăng kí học tập</h1>
+    <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">Tên</th>
+            <th scope="col">Lớp</th>
+            <th scope="col">Tùy chọn</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                if ($svQuery->num_rows > 0) {
+                    while ($sv = $svQuery->fetch_assoc()) {
+                        echo '<tr>
+                            <td>'.$sv['ten'].'</td>
+                            <td>'.$sv['lop'].'</td>
+                            <td><a class="btn btn-primary" href="./detail.php?sinhvienId='.$sv['id'].'">Xem chi tiết</a></td>
+                            </tr>';
+                    }
                 }
-            }
-        ?>
-    </tbody>
+            ?>
+            
+        </tbody>
     </table>
 </div>

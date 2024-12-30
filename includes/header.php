@@ -3,7 +3,7 @@
 $host = 'localhost:3307'; // Địa chỉ MySQL server (thường là localhost)
 $username = 'root';  // Tên đăng nhập MySQL
 $password = '';      // Mật khẩu MySQL (để trống nếu mặc định)
-$dbname = 'qlsinhvien'; // Tên cơ sở dữ liệu
+$dbname = 'qlsv'; // Tên cơ sở dữ liệu
 
 // Tạo kết nối
 $conn = new mysqli($host, $username, $password, $dbname);
