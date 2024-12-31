@@ -72,7 +72,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSoTien1Tin'])) {
         </tr>";
         } ?>
 
-        <?php if(isset($tongtien)) {
+        <?php if(isset($tongno)) {
             echo "<tr class='table-active'>
             <td colspan='6'>Tổng nợ</td>
             <td>".$tongno."</td>
