@@ -10,11 +10,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $diemCC = $_POST['diemCC'];
     $diemGK = $_POST['diemGK'];
     $diemCK = $_POST['diemCK'];
-    $tongdiem = $diemCC*0.1+$diemGK*0.3+$diemCK*0.6;
-    if($tongdiem >= 4) {
-        $trangthai = 1;
-    } else $trangthai = 0;
     try {
+        if($diemCC < 0 || $diemCC > 10 || $diemGK < 0 || $diemGK > 10 || $diemCK < 0 || $diemCK > 10) {
+            throw new Exception("Điểm phải nằm trong khoảng từ 1 đến 10.");
+        }
+
+        $tongdiem = $diemCC*0.1+$diemGK*0.3+$diemCK*0.6;
+        if($tongdiem >= 4) {
+            $trangthai = 1;
+        } else $trangthai = 0;
+
         $conn->query("insert into diemso (diemCC,diemGK,diemCK,trangthai,sinhvienId,monhocId)
         values(".$diemCC.",".$diemGK.",".$diemCK.",".$trangthai.",".$_GET['sinhvienId'].",".$_POST['monhocId'].")
         ");
@@ -91,15 +96,15 @@ where sinhvienId=".$_GET['sinhvienId']);
                 <form method='post'>
                     <div>
                         <label>Điểm CC</label>
-                        <input required type='number' name='diemCC' class='form-control' placeholder='Điểm CC' />
+                        <input required name='diemCC' class='form-control' placeholder='Điểm CC' />
                     </div>
                     <div>
                         <label>Điểm GK</label>
-                        <input required type='number' name='diemGK' class='form-control' placeholder='Điểm GK' />
+                        <input required name='diemGK' class='form-control' placeholder='Điểm GK' />
                     </div>
                     <div>
                         <label>Điểm CK</label>
-                        <input required type='number' name='diemCK' class='form-control' placeholder='Điểm CK' />
+                        <input required name='diemCK' class='form-control' placeholder='Điểm CK' />
                     </div>                    
                     <div>
                         <label>Môn học</label>

@@ -8,13 +8,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $diemCC = $_POST['diemCC'];
   $diemGK = $_POST['diemGK'];
   $diemCK = $_POST['diemCK'];
-  $tongdiem = $diemCC*0.1+$diemGK*0.3+$diemCK*0.6;
-  if($tongdiem >= 4) {
-      $trangthai = 1;
-  } else $trangthai = 0;
+  try {
+        if($diemCC < 0 || $diemCC > 10 || $diemGK < 0 || $diemGK > 10 || $diemCK < 0 || $diemCK > 10) {
+            throw new Exception("Điểm phải nằm trong khoảng từ 1 đến 10.");
+        }
+        
+        $tongdiem = $diemCC*0.1+$diemGK*0.3+$diemCK*0.6;
+        if($tongdiem >= 4) {
+            $trangthai = 1;
+        } else $trangthai = 0;
+        
+      $conn->query("update diemso set diemCC=".$diemCC.",diemGK=".$diemGK.",diemCK=".$diemCK.",trangthai=".$trangthai." where id=".$_GET['id']);
+      header('location: ./detail.php?sinhvienId='.$_GET['sinhvienId']);
+    } catch (Exception $e) {
+        echo '<script>alert("Có lỗi xảy ra: '.$e->getMessage().'")</script>';
+    } 
 
-  $conn->query("update diemso set diemCC=".$diemCC.",diemGK=".$diemGK.",diemCK=".$diemCK.",trangthai=".$trangthai." where id=".$_GET['id']);
-  header('location: ./detail.php?sinhvienId='.$_GET['sinhvienId']);
 }
 
 ?>
@@ -23,15 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <form method='post'>
       <div>
           <label>Điểm CC</label>
-          <input required type='number' name='diemCC' value='<?php echo $diemSoHientai['diemCC']; ?>' class='form-control' placeholder='Điểm CC' />
+          <input required name='diemCC' value='<?php echo $diemSoHientai['diemCC']; ?>' class='form-control' placeholder='Điểm CC' />
       </div>
       <div>
           <label>Điểm GK</label>
-          <input required type='number' name='diemGK' value='<?php echo $diemSoHientai['diemGK']; ?>' class='form-control' placeholder='Điểm GK' />
+          <input required name='diemGK' value='<?php echo $diemSoHientai['diemGK']; ?>' class='form-control' placeholder='Điểm GK' />
       </div>
       <div>
           <label>Điểm CK</label>
-          <input required type='number' name='diemCK' value='<?php echo $diemSoHientai['diemCK']; ?>' class='form-control' placeholder='Điểm CK' />
+          <input required name='diemCK' value='<?php echo $diemSoHientai['diemCK']; ?>' class='form-control' placeholder='Điểm CK' />
       </div>            
       <button class="btn btn-primary" data-bs-dismiss="modal">Sửa</button>
     </form>
