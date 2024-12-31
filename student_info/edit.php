@@ -10,8 +10,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $lop = $_POST['lop'];
     $email = $_POST['email'];
     $sdt = $_POST['sdt'];
-    $conn->query("update sinhvien set ten='".$ten."',diachi='".$diachi."',email='".$email."',sdt='".$sdt."',lop='".$lop."' where id=".$_GET['sinhvienId']);
-    header('location: ./index.php');
+    try {
+        $checkEmail = $conn->query("select * from sinhvien where email='".$_POST['email']."'");        
+        $conn->query("update sinhvien set ten='".$ten."',diachi='".$diachi."',email='".$email."',sdt='".$sdt."',lop='".$lop."' where id=".$_GET['sinhvienId']);
+        header('location: ./index.php');
+    } catch (Exception $e) {
+        echo '<script>alert("Có lỗi xảy ra: '.$e->getMessage().'")</script>';
+    } 
 }
 ?>
 

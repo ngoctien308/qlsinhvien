@@ -10,8 +10,20 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $lop = $_POST['lop'];
     $email = $_POST['email'];
     $sdt = $_POST['sdt'];
-    $conn->query("insert into sinhvien (ten, diachi, lop, email, sdt) values('".$ten."','".$diachi."','".$lop."','".$email."','".$sdt."')");
-    header("Refresh: 1");
+    try {
+        $checkEmail = $conn->query("select * from sinhvien where email='".$_POST['email']."'");
+        if($checkEmail->num_rows > 0) {
+            throw new Exception("Email đã tồn tại.");
+        }
+        $checkSdt = $conn->query("select * from sinhvien where sdt=".$_POST['sdt']);
+        if($checkSdt->num_rows > 0) {
+            throw new Exception("Sdt đã tồn tại.");
+        }
+        $conn->query("insert into sinhvien (ten, diachi, lop, email, sdt) values('".$ten."','".$diachi."','".$lop."','".$email."','".$sdt."')");
+        header("Refresh: 1");
+    } catch (Exception $e) {
+        echo '<script>alert("Có lỗi xảy ra: '.$e->getMessage().'")</script>';
+    } 
 }
 
 ?>
