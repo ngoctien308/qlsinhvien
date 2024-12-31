@@ -88,7 +88,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSoTien1Tin'])) {
                 <form method='post'>
                     <div>
                         <label>Số tiền 1 tín</label>
-                        <input name='sotien1tin' class='form-control' value="<?php if(isset($sotien1tin)) echo $sotien1tin; ?>" />
+                        <input type='number' name='sotien1tin' class='form-control' value="<?php if(isset($sotien1tin)) echo $sotien1tin; ?>" />
                     </div>
                     <button type='submit' name='updateSoTien1Tin' class='btn btn-primary mt-2'>Lưu</button>
                 </form>

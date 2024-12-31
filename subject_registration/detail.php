@@ -21,7 +21,7 @@ $sv = $svQuery->fetch_assoc();
 
 // Xử lý form thêm môn học
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_course'])) {
-    if (!$hockiId ) {
+    if (!$hockiId) {
         $error_message = 'Vui lòng chọn đúng học kỳ hiện tại để đăng ký!';
     } else {
         $monhocId = $_POST['monhocId'];
@@ -39,13 +39,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_course'])) {
             if (empty($monhocId) || empty($giangvienId)) {
                 $error_message = 'Vui lòng chọn giảng viên dạy học!';
             } else{
-            $insertQuery = "INSERT INTO dangkimonhoc (sinhvienId, monhocId, hockiId, giangvienId) 
+            try {
+                $insertQuery = "INSERT INTO dangkimonhoc (sinhvienId, monhocId, hockiId, giangvienId) 
                             VALUES ($sinhvienId, $monhocId, $hockiId, $giangvienId)";
-            if ($conn->query($insertQuery)) {
-                $success_message = 'Thêm môn học thành công!';
-            } else {
-                $error_message = 'Lỗi khi thêm môn học: ' . $conn->error;
-            }
+                if ($conn->query($insertQuery)) {
+                    $success_message = 'Thêm môn học thành công!';
+                } else {
+                    $error_message = 'Lỗi khi thêm môn học: ' . $conn->error;
+                }
+            } catch (Exception $e) {
+                echo '<script>alert("Có lỗi xảy ra: '.$e->getMessage().'")</script>';
+            }           
+            
 
             if($conn->query("select * from thanhtoan where sinhvienId=".$_GET['sinhvienId'])->num_rows == 0) {
                 $conn->query("insert into thanhtoan (sinhvienId) values(".$_GET['sinhvienId'].")");
@@ -272,5 +277,6 @@ function validateForm() {
 <!-- Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

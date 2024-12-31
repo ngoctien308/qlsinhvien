@@ -21,7 +21,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     <form method='post'>
         <div>
             <label  class='form-label'>Ngày học</label>
-            <input type="date" class='form-control' name='ngay' value='<?php echo $tkb['ngay'] ?>'>
+            <input required type="date" class='form-control' name='ngay' value='<?php echo $tkb['ngay'] ?>'>
         </div>
         <div>
             <label class='form-label'>Môn học</label>
@@ -41,11 +41,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <div>
             <label  class='form-label'>Tiết bắt đầu</label>
-            <input type="number" class='form-control' name='tietbd' value='<?php echo $tkb['tietbd'] ?>'>
+            <input required type="number" class='form-control' name='tietbd' value='<?php echo $tkb['tietbd'] ?>'>
         </div>
         <div>
             <label  class='form-label'>Tiết kết thúc</label>
-            <input type="number" class='form-control' name='tietkt' value='<?php echo $tkb['tietkt'] ?>'>
+            <input required type="number" class='form-control' name='tietkt' value='<?php echo $tkb['tietkt'] ?>'>
         </div>
         <button class='mt-2 btn btn-primary'>Cập nhật</button>
     </form>

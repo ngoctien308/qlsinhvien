@@ -23,15 +23,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <form method='post'>
       <div>
           <label>Điểm CC</label>
-          <input required name='diemCC' value='<?php echo $diemSoHientai['diemCC']; ?>' class='form-control' placeholder='Điểm CC' />
+          <input required type='number' name='diemCC' value='<?php echo $diemSoHientai['diemCC']; ?>' class='form-control' placeholder='Điểm CC' />
       </div>
       <div>
           <label>Điểm GK</label>
-          <input required name='diemGK' value='<?php echo $diemSoHientai['diemGK']; ?>' class='form-control' placeholder='Điểm GK' />
+          <input required type='number' name='diemGK' value='<?php echo $diemSoHientai['diemGK']; ?>' class='form-control' placeholder='Điểm GK' />
       </div>
       <div>
           <label>Điểm CK</label>
-          <input required name='diemCK' value='<?php echo $diemSoHientai['diemCK']; ?>' class='form-control' placeholder='Điểm CK' />
+          <input required type='number' name='diemCK' value='<?php echo $diemSoHientai['diemCK']; ?>' class='form-control' placeholder='Điểm CK' />
       </div>            
       <button class="btn btn-primary" data-bs-dismiss="modal">Sửa</button>
     </form>

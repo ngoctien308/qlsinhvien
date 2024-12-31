@@ -4,7 +4,6 @@ include('../includes/header.php');
 
 $sv = $conn->query("select * from sinhvien where id=".$_GET['sinhvienId'])->fetch_assoc();
 
-$hockiQuery = $conn->query("select distinct hocki.id, hocki.tenhocki from dangkimonhoc inner join hocki on hocki.id=dangkimonhoc.hockiId where sinhvienId=".$_GET['sinhvienId']);
 $monhocQuery = $conn->query("select distinct monhoc.id, monhoc.tenmonhoc from dangkimonhoc inner join monhoc on monhoc.id=dangkimonhoc.monhocId where sinhvienId=".$_GET['sinhvienId']);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -15,16 +14,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if($tongdiem >= 4) {
         $trangthai = 1;
     } else $trangthai = 0;
-
-    $conn->query("insert into diemso (diemCC,diemGK,diemCK,trangthai,sinhvienId,monhocId,hockiId)
-    values(".$diemCC.",".$diemGK.",".$diemCK.",".$trangthai.",".$_GET['sinhvienId'].",".$_POST['monhocId'].",".$_POST['hockiId'].")
-    ");
-    header("Refresh: 1");
+    try {
+        $conn->query("insert into diemso (diemCC,diemGK,diemCK,trangthai,sinhvienId,monhocId)
+        values(".$diemCC.",".$diemGK.",".$diemCK.",".$trangthai.",".$_GET['sinhvienId'].",".$_POST['monhocId'].")
+        ");
+        header("Refresh: 1");
+    } catch (Exception $e) {
+        echo '<script>alert("Có lỗi xảy ra: '.$e->getMessage().'")</script>';
+    } 
 }
 
-$diemsoQuery = $conn->query("select diemso.*,monhoc.tenmonhoc,hocki.tenhocki  from diemso
+$diemsoQuery = $conn->query("select diemso.*,monhoc.tenmonhoc from diemso
 inner join monhoc on monhoc.id=diemso.monhocId
-inner join hocki on hocki.id=diemso.hockiId
 where sinhvienId=".$_GET['sinhvienId']);
 
 ?>
@@ -41,12 +42,12 @@ where sinhvienId=".$_GET['sinhvienId']);
         <thead>
             <tr class='table-active'>
                 <th scope="col">Tên môn</th>
+                <th scope="col">Học kì</th>
                 <th scope="col">Điểm CC</th>
                 <th scope="col">Điểm GK</th>
                 <th scope="col">Điểm CK</th>
                 <th scope="col">Tổng điểm</th>
                 <th scope="col">Trạng thái</th>
-                <th scope="col">Học kì</th>
                 <th scope="col" colspan="2">Tùy chọn</th>
             </tr>
         </thead>
@@ -61,13 +62,15 @@ where sinhvienId=".$_GET['sinhvienId']);
                         } else {
                             $trangthai = 'Chưa hoàn thành';
                         }
+                        $hocki = $conn->query("select * from dangkimonhoc inner join hocki on hocki.id=dangkimonhoc.hockiId where sinhvienId=".$_GET['sinhvienId']." and monhocId=".$diemso['monhocId'])->fetch_assoc();
+
                         echo '<tr><td scope="col">'.$diemso['tenmonhoc'].'</td>
+                                <td scope="col">'.$hocki['tenhocki'].'</td>
                                 <td scope="col">'.$diemso['diemCC'].'</td>
                                 <td scope="col">'.$diemso['diemGK'].'</td>
                                 <td scope="col">'.$diemso['diemCK'].'</td>
                                 <td scope="col">'.$tongdiem.'</td>
                                 <td scope="col">'.$trangthai.'</td>
-                                <td scope="col">'.$diemso['tenhocki'].'</td>
                                 <td><a href="./edit.php?id='.$diemso['id'].'&sinhvienId='.$diemso['sinhvienId'].'" type="button" class="btn btn-warning">Sửa</a></td>
                                 <td><a href="./delete.php?id='.$diemso['id'].'" type="button" class="btn btn-danger">Xóa</a></td></tr>
                         ';
@@ -88,28 +91,16 @@ where sinhvienId=".$_GET['sinhvienId']);
                 <form method='post'>
                     <div>
                         <label>Điểm CC</label>
-                        <input required name='diemCC' class='form-control' placeholder='Điểm CC' />
+                        <input required type='number' name='diemCC' class='form-control' placeholder='Điểm CC' />
                     </div>
                     <div>
                         <label>Điểm GK</label>
-                        <input required name='diemGK' class='form-control' placeholder='Điểm GK' />
+                        <input required type='number' name='diemGK' class='form-control' placeholder='Điểm GK' />
                     </div>
                     <div>
                         <label>Điểm CK</label>
-                        <input required name='diemCK' class='form-control' placeholder='Điểm CK' />
-                    </div>
-                    <div>
-                        <label>Học kì</label>
-                        <select class='form-control' name='hockiId'>
-                            <?php
-                                if($hockiQuery->num_rows > 0) {
-                                    while ($hocki = $hockiQuery->fetch_assoc()) {  
-                                        echo '<option value="'.$hocki['id'].'">'.$hocki['tenhocki'].'</option>';
-                                    }
-                                }
-                            ?>
-                        </select>
-                    </div>
+                        <input required type='number' name='diemCK' class='form-control' placeholder='Điểm CK' />
+                    </div>                    
                     <div>
                         <label>Môn học</label>
                         <select class='form-control' name='monhocId'>
