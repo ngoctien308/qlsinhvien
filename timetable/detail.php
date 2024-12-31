@@ -90,11 +90,11 @@ where sinhvienId=".$_GET['sinhvienId']);
             </div>
             <div>
                 <label class='form-label'>Tiết bắt đầu</label>
-                <input required type="number" class='form-control' name='tietbd'>
+                <input min="1" max="10" required type="number" class='form-control' name='tietbd'>
             </div>
             <div>
                 <label  class='form-label'>Tiết kết thúc</label>
-                <input required type="number" class='form-control' name='tietkt'>
+                <input min="1" max="10" required type="number" class='form-control' name='tietkt'>
             </div>            
         </div>
         <div class="modal-footer">

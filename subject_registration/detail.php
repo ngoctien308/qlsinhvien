@@ -47,16 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_course'])) {
                 } else {
                     $error_message = 'Lỗi khi thêm môn học: ' . $conn->error;
                 }
+                $conn->query("insert into thanhtoan (sinhvienId,monhocId) values(".$_GET['sinhvienId'].",".$_POST['monhocId'].")");
             } catch (Exception $e) {
                 echo '<script>alert("Có lỗi xảy ra: '.$e->getMessage().'")</script>';
             }           
-            
-
-            if($conn->query("select * from thanhtoan where sinhvienId=".$_GET['sinhvienId'])->num_rows == 0) {
-                $conn->query("insert into thanhtoan (sinhvienId) values(".$_GET['sinhvienId'].")");
-            } else {
-                $conn->query("update thanhtoan set daThanhToan=0 where sinhvienId=".$_GET['sinhvienId']);
-            }
         }
     } else {
         $error_message = 'Vui lòng chọn môn học!';

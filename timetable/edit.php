@@ -41,11 +41,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <div>
             <label  class='form-label'>Tiết bắt đầu</label>
-            <input required type="number" class='form-control' name='tietbd' value='<?php echo $tkb['tietbd'] ?>'>
+            <input min="1" max="10" required type="number" class='form-control' name='tietbd' value='<?php echo $tkb['tietbd'] ?>'>
         </div>
         <div>
             <label  class='form-label'>Tiết kết thúc</label>
-            <input required type="number" class='form-control' name='tietkt' value='<?php echo $tkb['tietkt'] ?>'>
+            <input min="1" max="10" required type="number" class='form-control' name='tietkt' value='<?php echo $tkb['tietkt'] ?>'>
         </div>
         <button class='mt-2 btn btn-primary'>Cập nhật</button>
     </form>

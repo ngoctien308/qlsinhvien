@@ -2,8 +2,10 @@
 include('../includes/head.php');
 include('../includes/header.php');
 
-$thongtinQuery = $conn->query("select * from thanhtoan inner join sinhvien on sinhvien.id=thanhtoan.sinhvienId inner join dangkimonhoc on dangkimonhoc.sinhvienId=sinhvien.id inner join monhoc on monhoc.id=dangkimonhoc.monhocId inner join hocki on hocki.id=dangkimonhoc.hockiId where thanhtoan.sinhvienId=".$_GET['sinhvienId']);
-$thongtinDaThanhToan = 0;
+$thongtinQuery = $conn->query("select * from thanhtoan
+ inner join sinhvien on sinhvien.id=thanhtoan.sinhvienId 
+ inner join monhoc on monhoc.id=thanhtoan.monhocId 
+ where thanhtoan.sinhvienId=".$_GET['sinhvienId']);
 $sotien1tin;
 
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnThanhToan'])) {
@@ -27,39 +29,53 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSoTien1Tin'])) {
         <th scope="col">Số tín</th>
         <th scope="col">Số tiền 1 tín</th>
         <th scope="col">Học kì</th>
+        <th scope="col">Trạng thái</th>
         </tr>
     </thead>
     <tbody>
         <?php
             if ($thongtinQuery->num_rows > 0) {
                 $tongtien = 0;
-                while ($thongtin = $thongtinQuery->fetch_assoc()) {
-                    $thongtinDaThanhToan = $thongtin['daThanhToan'];
+                $tongno = 0;
+                while ($thongtin = $thongtinQuery->fetch_assoc()) {                    
                     $sotien1tin = $thongtin['sotien1tin'];
+                    $thongtinDaThanhToan;
+                    if($thongtin['daThanhToan'] == 0) {
+                        $thongtinDaThanhToan = 'Chưa thanh toán';
+                    } else 
+                    $thongtinDaThanhToan = 'Đã thanh toán';
                     $tongtien += $thongtin['sotien1tin'] * $thongtin['sotinchi'];
+                    if($thongtin['daThanhToan'] == 0) {
+                        $tongno += $thongtin['sotien1tin'] * $thongtin['sotinchi'];
+                    }
+
+                    $hocki = $conn->query("select * from dangkimonhoc 
+                    inner join hocki on hocki.id=dangkimonhoc.hockiId
+                    where dangkimonhoc.sinhvienId=".$thongtin['sinhvienId']." 
+                    and dangkimonhoc.monhocId=".$thongtin['monhocId'])->fetch_assoc();
                     echo '<tr>
                             <td>'.$thongtin['ten'].'</td>
                             <td>'.$thongtin['lop'].'</td>
                             <td>'.$thongtin['tenmonhoc'].'</td>
                             <td>'.$thongtin['sotinchi'].'</td>
                             <td>'.$thongtin['sotien1tin'].'</td>
-                            <td>'.$thongtin['tenhocki'].'</td>
+                            <td>'.$hocki['tenhocki'].'</td>
+                            <td>'.$thongtinDaThanhToan.'</td>
                         </tr>';                    
                 }
             }
         ?>
         <?php if(isset($tongtien)) {
-            if($thongtinDaThanhToan == 0) {
-                $thongtinDaThanhToanText = 'Chưa thanh toán';
-            } else {
-                $thongtinDaThanhToanText = 'Đã thanh toán';
-            }
             echo "<tr class='table-active'>
-            <td colspan='4'>Tổng tiền</td>
+            <td colspan='6'>Tổng tiền</td>
             <td>".$tongtien."</td>
-            <td>".$thongtinDaThanhToanText."</td>
         </tr>";
         } ?>
+
+        <tr class='table-active'>
+            <td colspan="6">Tổng nợ</td>
+            <td><?php echo $tongno; ?></td>
+        </tr>
         
     </tbody>
     </table>
